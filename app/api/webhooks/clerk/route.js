@@ -1,10 +1,9 @@
+import { createUser, updateUser, deleteUser } from "@/lib/actions/userActions";
 import { clerkClient } from "@clerk/nextjs";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
-
-import { createUser, deleteUser, updateUser } from "@/lib/actions/userActions";
 
 export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -112,5 +111,5 @@ export async function POST(req) {
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log("Webhook body:", body);
 
-  return new Response("", { status: 200 });
+  return NextResponse.json({ status: 200 });
 }
