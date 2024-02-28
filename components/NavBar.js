@@ -4,7 +4,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
-    <nav className="bg-gray-800 text-white p-4">
+    <nav className="bg-[#181818] text-white p-4 text-sm">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo on the left */}
         <div className="flex items-center">
@@ -13,9 +13,8 @@ const Navbar = () => {
 
         {/* Links in the center */}
         <div className="hidden md:flex space-x-4">
-          <Link href="/about">About</Link>
-          <Link href="/services">Service</Link>
-          <Link href="/contact">Contact</Link>
+          <Link href="/">Home</Link>
+          <Link href="/dashboard">Dashboard</Link>
         </div>
 
         {/* Login/Logout on the right */}
@@ -26,7 +25,7 @@ const Navbar = () => {
             </Button>
           </SignedOut>
           <SignedIn>
-            <UserButton afterSignOutUrl="/" showName />
+            <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>
       </div>
