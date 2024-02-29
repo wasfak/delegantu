@@ -8,7 +8,7 @@ export function ConfirmModal({ isOpen, onClose, onConfirm, message }) {
       className="fixed z-10 inset-0 overflow-y-auto"
     >
       <div className="flex items-center justify-center min-h-screen">
-        <Dialog.Panel className="w-full max-w-md bg-white p-6 rounded-lg shadow">
+        <Dialog.Panel className="w-full max-w-md bg-[#252525] text-white p-6 rounded-lg shadow">
           <Dialog.Title>Confirm Action</Dialog.Title>
           <p>{message}</p>
           <div className="flex justify-end space-x-4 mt-4">

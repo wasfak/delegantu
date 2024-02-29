@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { getTasks } from "@/app/serverActions/getTasks";
 import EmptyTask from "@/components/EmptyTask";
 import TaskDisplayer from "@/components/TaskDisplayer";
@@ -8,7 +8,7 @@ export default function AdminHomePage() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [tasks, setTasks] = useState([]);
-
+  console.log(tasks);
   // Fetch tasks when the component mounts and whenever there's an update
   useEffect(() => {
     setMounted(true);
@@ -23,8 +23,8 @@ export default function AdminHomePage() {
     fetchTasks();
   }, []); // The empty dependency array means this effect runs once after the initial render
 
-  const addNewTask = (newTask) => {
-    setTasks([...tasks, newTask]);
+  const addNewTask = (tasks) => {
+    setTasks(tasks);
   };
 
   if (loading) {
@@ -40,10 +40,17 @@ export default function AdminHomePage() {
         All Tasks
         <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#27AE60]"></span>
       </h1>
+
       <div className="grid grid-cols-4 gap-4 mt-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <TaskDisplayer task={task} key={task._id} setTasks={setTasks} tasks={tasks}/>
+            <TaskDisplayer
+              task={task}
+              key={task._id}
+              setTasks={setTasks}
+              tasks={tasks}
+              addNewTask={addNewTask}
+            />
           ))
         ) : (
           <EmptyTask addNewTask={addNewTask} />

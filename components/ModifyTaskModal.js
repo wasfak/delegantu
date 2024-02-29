@@ -1,19 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Button } from "./ui/button";
-import { createTask } from "@/app/serverActions/createTask";
+import { createTask, updateTask } from "@/app/serverActions/createTask";
 
 import toast from "react-hot-toast";
 
-export default function TaskModal({ isOpen, closeModal, addNewTask }) {
+export default function ModifyTaskModal({
+  isOpen,
+  closeModal,
+  addNewTask,
+  task: initialTaskProp,
+}) {
   const today = new Date().toISOString().split("T")[0];
   const [task, setTask] = useState({
     taskName: "",
     taskDetail: "",
     taskCategory: "",
-    taskDate: today,
+    taskDate: "",
     taskStatus: "",
   });
+  useEffect(() => {
+    setTask({
+      taskName: initialTaskProp?.taskName || "",
+      taskDetail: initialTaskProp?.taskDetail || "",
+      taskCategory: initialTaskProp?.taskCategory[0] || "default",
+      taskDate: initialTaskProp?.taskDate || today,
+      taskStatus: initialTaskProp?.taskStatus[0] || "not_started",
+    });
+  }, [initialTaskProp]);
 
   const handleChange = (e) => {
     const { name, value, type, status, checked } = e.target;
@@ -25,20 +39,11 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await createTask(task);
+    const response = await updateTask(initialTaskProp._id, task);
     console.log(response);
-    toast.success("Task added");
+    toast.success("Task updated");
 
     addNewTask(response);
-
-    setTask({
-      taskName: "",
-      taskDetail: "",
-      taskCategory: "",
-      taskDate: today,
-      taskStatus: "",
-    });
-    // Here you would typically handle the form submission to your backend
 
     closeModal();
   };
@@ -51,9 +56,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
     >
       <div className="flex items-center justify-center min-h-screen">
         <Dialog.Panel className="w-full max-w-md bg-[#181818] text-white text-sm p-6 rounded-lg shadow">
-          <Dialog.Title className="text-lg font-bold">
-            Create a Task
-          </Dialog.Title>
+          <Dialog.Title className="text-lg font-bold">Modify Task</Dialog.Title>
           <form onSubmit={handleSubmit} className="space-y-4 mt-4 text-white">
             {/* Task Name */}
             <div>
@@ -67,7 +70,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
                 type="text"
                 id="taskName"
                 name="taskName"
-                value={task.taskName}
+                value={"" || task.taskName}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black p-2"
               />
@@ -84,7 +87,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
               <textarea
                 id="taskDetail"
                 name="taskDetail"
-                value={task.taskDetail}
+                value={"" || task.taskDetail}
                 onChange={handleChange}
                 rows={3}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black p-2"
@@ -92,6 +95,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
             </div>
 
             {/* Task Category */}
+
             <div>
               <label
                 htmlFor="taskCategory"
@@ -171,7 +175,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit">Create Task</Button>
+              <Button type="submit">Update Task</Button>
             </div>
           </form>
         </Dialog.Panel>

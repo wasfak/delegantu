@@ -1,4 +1,3 @@
-1.add toasters
-2.fix in all tasks to display title then load data suspence
-3.start to work on edit
+1.add toasters   DONE
+3.start to work on edit  DONE
 4.add logo

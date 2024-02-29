@@ -4,22 +4,32 @@ import { MdDelete } from "react-icons/md";
 import { Button } from "./ui/button";
 import { deleteAction } from "@/app/serverActions/deleteTask";
 import { ConfirmModal } from "./ConfirmModal";
+import toast from "react-hot-toast";
+import TaskModal from "./TaskModal";
+import ModifyTaskModal from "./ModifyTaskModal";
 
-export default function TaskDisplayer({ task, setTasks, tasks }) {
+export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
+  const [taskModal, setTaskModal] = useState(false);
 
   const handleDeleteTrigger = (taskId) => {
     setTaskIdToDelete(taskId);
     setIsConfirmModalOpen(true);
   };
 
+  const handleModifyTrigger = (task) => {
+    setTaskModal(true);
+  };
+
   const handleConfirmDelete = async () => {
     if (taskIdToDelete) {
       await deleteAction(taskIdToDelete);
       setTasks(tasks.filter((task) => task._id !== taskIdToDelete));
+      toast.success("Task Deleted");
     }
     setIsConfirmModalOpen(false);
+
     setTaskIdToDelete(null);
   };
   return (
@@ -31,7 +41,7 @@ export default function TaskDisplayer({ task, setTasks, tasks }) {
       <div className="flex items-center justify-between w-full">
         <Button>{task.taskStatus}</Button>
         <div className="flex items-center justify-between gap-x-2">
-          <button>
+          <button onClick={() => handleModifyTrigger(task)}>
             <CiEdit className="w-6 h-6" />
           </button>
           <button onClick={() => handleDeleteTrigger(task._id)}>
@@ -45,6 +55,12 @@ export default function TaskDisplayer({ task, setTasks, tasks }) {
           message="Are you sure you want to delete this task?"
         />
       </div>
+      <ModifyTaskModal
+        isOpen={taskModal}
+        closeModal={() => setTaskModal(false)}
+        task={task}
+        addNewTask={addNewTask}
+      />
     </div>
   );
 }
