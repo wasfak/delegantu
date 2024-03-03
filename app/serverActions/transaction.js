@@ -40,29 +40,25 @@ export async function createTransaction(transaction) {
     await db.connectDb();
 
     const newEndTrialDate = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
-    try {
-      // Find the user by clerkId (buyerId) and update
-      await User.findOneAndUpdate(
-        { clerkId: transaction.buyerId },
-        {
-          subscribed: true,
-          endTrialDate: newEndTrialDate,
-        },
-        { new: true } // Returns the updated document
-      );
 
-      // Respond back to Stripe or your frontend
-      return NextResponse.json({
-        message: "Subscription updated successfully",
-      });
-    } catch (error) {
-      console.error("Error updating user subscription:", error);
-      return NextResponse.json({
-        message: "Error updating subscription",
-        error,
-      });
-    }
+    await User.findOneAndUpdate(
+      { clerkId: transaction.buyerId },
+      {
+        subscribed: true,
+        endTrialDate: newEndTrialDate,
+      },
+      { new: true } // Returns the updated document
+    );
+
+    // Respond back to Stripe or your frontend
+    return NextResponse.json({
+      message: "Subscription updated successfully",
+    });
   } catch (error) {
-    handleError(error);
+    console.error("Error updating user subscription:", error);
+    return NextResponse.json({
+      message: "Error updating subscription",
+      error,
+    });
   }
 }
