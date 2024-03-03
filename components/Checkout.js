@@ -38,7 +38,7 @@ const Checkout = ({ plan, amount, buyerId }) => {
       amount,
       buyerId,
     };
-    console.log(transaction);
+
     await checkoutCredits(transaction);
   };
 

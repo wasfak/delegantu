@@ -1,6 +1,7 @@
 "use server";
 
 import db from "@/db";
+import User from "@/models/userModel";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
@@ -24,14 +25,12 @@ export async function checkoutCredits(transaction) {
     ],
     metadata: {
       plan: transaction.plan,
-
       buyerId: transaction.buyerId,
     },
     mode: "payment",
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
   });
-
   redirect(session.url);
 }
 
