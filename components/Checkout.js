@@ -16,17 +16,20 @@ const Checkout = ({ plan, amount, buyerId }) => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
-      toast.success("DONE");
+      toast({
+        title: "Order placed!",
+        description: "You will receive an email confirmation",
+        duration: 5000,
+      });
     }
 
-    /*     if (query.get("canceled")) {
+    if (query.get("canceled")) {
       toast({
         title: "Order canceled!",
         description: "Continue to shop around and checkout when you're ready",
         duration: 5000,
-        className: "error-toast",
       });
-    } */
+    }
   }, []);
 
   const onCheckout = async () => {
@@ -40,7 +43,7 @@ const Checkout = ({ plan, amount, buyerId }) => {
   };
 
   return (
-    <form action={onCheckout} method="POST">
+    <form action={onCheckout}>
       <section>
         <Button
           type="submit"

@@ -1,6 +1,6 @@
 "use server";
 
-import { Transaction } from "mongodb";
+import db from "@/db";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
@@ -35,19 +35,34 @@ export async function checkoutCredits(transaction) {
   redirect(session.url);
 }
 
-/*   export async function createTransaction(transaction) {
+export async function createTransaction(transaction) {
+  try {
+    await db.connectDb();
+
+    const newEndTrialDate = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
     try {
-      await connectToDatabase();
-  
-      // Create a new transaction with a buyerId
-      const newTransaction = await Transaction.create({
-        ...transaction, buyer: transaction.buyerId
-      })
-  
-      await updateCredits(transaction.buyerId, transaction.credits);
-  
-      return JSON.parse(JSON.stringify(newTransaction));
+      // Find the user by clerkId (buyerId) and update
+      await User.findOneAndUpdate(
+        { clerkId: transaction.buyerId },
+        {
+          subscribed: true,
+          endTrialDate: newEndTrialDate,
+        },
+        { new: true } // Returns the updated document
+      );
+
+      // Respond back to Stripe or your frontend
+      return NextResponse.json({
+        message: "Subscription updated successfully",
+      });
     } catch (error) {
-      handleError(error)
+      console.error("Error updating user subscription:", error);
+      return NextResponse.json({
+        message: "Error updating subscription",
+        error,
+      });
     }
-  } */
+  } catch (error) {
+    handleError(error);
+  }
+}

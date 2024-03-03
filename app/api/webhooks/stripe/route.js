@@ -1,4 +1,4 @@
-import User from "@/models/userModel";
+import { createTransaction } from "@/app/serverActions/transaction";
 import { NextResponse } from "next/server";
 import stripe from "stripe";
 
@@ -31,30 +31,8 @@ export async function POST(request) {
       createdAt: new Date(),
     };
 
-    const newEndTrialDate = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
-
-    try {
-      // Find the user by clerkId (buyerId) and update
-      await User.findOneAndUpdate(
-        { clerkId: buyerId },
-        {
-          subscribed: true,
-          endTrialDate: newEndTrialDate,
-        },
-        { new: true } // Returns the updated document
-      );
-
-      // Respond back to Stripe or your frontend
-      return NextResponse.json({
-        message: "Subscription updated successfully",
-      });
-    } catch (error) {
-      console.error("Error updating user subscription:", error);
-      return NextResponse.json({
-        message: "Error updating subscription",
-        error,
-      });
-    }
+    const newTransaction = await createTransaction(transaction);
+    return NextResponse.json({ message: "OK", transaction: newTransaction });
   }
 
   return new Response("", { status: 200 });
