@@ -1,30 +1,37 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getTasks } from "@/app/serverActions/getTasks";
 import EmptyTask from "@/components/EmptyTask";
 import TaskDisplayer from "@/components/TaskDisplayer";
+import { getUserInfo } from "@/app/serverActions/userInfo";
 
 export default function AdminHomePage() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [tasks, setTasks] = useState([]);
-  console.log(tasks);
-  // Fetch tasks when the component mounts and whenever there's an update
+
   useEffect(() => {
     setMounted(true);
-    const fetchTasks = async () => {
+
+    const fetchData = async () => {
       setLoading(true);
-      const data = await getTasks();
 
-      setTasks(data);
-      setLoading(false);
+      try {
+        // Fetch tasks or perform other actions as needed
+        const data = await getTasks();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+    getUserInfo();
+    fetchData();
+  }, []);
 
-    fetchTasks();
-  }, []); // The empty dependency array means this effect runs once after the initial render
-
-  const addNewTask = (tasks) => {
-    setTasks(tasks);
+  const addNewTask = (newTasks) => {
+    setTasks(newTasks);
   };
 
   if (loading) {
@@ -34,6 +41,7 @@ export default function AdminHomePage() {
   if (!mounted) {
     return "";
   }
+
   return (
     <div className="bg-[#212121] rounded-xl p-4 w-[75vw] font-bold">
       <h1 className="relative inline-block">
@@ -42,8 +50,8 @@ export default function AdminHomePage() {
       </h1>
 
       <div className="grid grid-cols-4 gap-4 mt-4">
-        {tasks.length > 0 ? (
-          tasks.map((task) => (
+        {tasks?.length > 0 ? (
+          tasks?.map((task) => (
             <TaskDisplayer
               task={task}
               key={task._id}

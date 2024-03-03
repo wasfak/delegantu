@@ -9,6 +9,7 @@ export const getTasks = async () => {
   try {
     await db.connectDb();
     const tasks = await Task.find({ clerkId: userId });
+
     return JSON.parse(JSON.stringify(tasks));
   } catch (error) {}
 };

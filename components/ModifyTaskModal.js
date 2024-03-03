@@ -40,7 +40,7 @@ export default function ModifyTaskModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await updateTask(initialTaskProp._id, task);
-    console.log(response);
+
     toast.success("Task updated");
 
     addNewTask(response);

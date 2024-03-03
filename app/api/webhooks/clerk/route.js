@@ -60,7 +60,7 @@ export async function POST(req) {
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
-
+    const trialDuration = 1 * 24 * 60 * 60 * 1000;
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
@@ -68,6 +68,8 @@ export async function POST(req) {
       firstName: first_name,
       lastName: last_name,
       photo: image_url,
+      startTrialDate: new Date(),
+      endTrialDate: new Date(Date.now() + trialDuration),
     };
 
     const newUser = await createUser(user);

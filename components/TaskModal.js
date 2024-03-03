@@ -26,7 +26,7 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await createTask(task);
-    console.log(response);
+
     toast.success("Task added");
 
     addNewTask(response);
