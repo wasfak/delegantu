@@ -8,26 +8,22 @@ import Stripe from "stripe";
 export async function checkoutCredits(transaction) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-  const amount = Number(transaction.amount) * 100;
-
+  const priceId = "price_1OqJ2EC3KgxkAme9B9YYja5C";
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
-        price_data: {
-          currency: "usd",
-          unit_amount: amount,
-          product_data: {
-            name: transaction.plan,
-          },
-        },
+        price: priceId,
         quantity: 1,
       },
     ],
-    metadata: {
-      plan: transaction.plan,
-      buyerId: transaction.buyerId,
+    subscription_data: {
+      // Optional: Add metadata if needed
+      metadata: {
+        plan: transaction.plan,
+        buyerId: transaction.buyerId,
+      },
     },
-    mode: "payment",
+    mode: "subscription",
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
   });
@@ -38,7 +34,7 @@ export async function createTransaction(transaction) {
   try {
     await db.connectDb();
 
-    const newEndTrialDate = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+    const newEndTrialDate = new Date(Date.now() + 20 * 24 * 60 * 60 * 1000);
 
     await User.findOneAndUpdate(
       { clerkId: transaction.buyerId },
