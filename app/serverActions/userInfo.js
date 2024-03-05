@@ -9,7 +9,6 @@ export const getUserInfo = async () => {
   try {
     await db.connectDb();
     const user = await User.findOne({ clerkId: userId });
-    console.log(user);
 
     // Calculate remaining trial time
     const remainingTrialTime = calculateRemainingTrialTime(user.endTrialDate);

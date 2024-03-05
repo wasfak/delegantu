@@ -8,7 +8,7 @@ export const getTasks = async () => {
   const { userId } = auth();
   try {
     await db.connectDb();
-    const tasks = await Task.find({ clerkId: userId });
+    const tasks = await Task.find({ clerkId: userId }).sort({ createdAt: -1 });
 
     return JSON.parse(JSON.stringify(tasks));
   } catch (error) {}

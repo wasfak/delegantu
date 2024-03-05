@@ -24,7 +24,7 @@ const taskSchema = new Schema(
     },
     taskStatus: {
       type: String,
-      default: "on going",
+      default: "unassigned",
     },
     assingTo: {
       type: String,

@@ -34,7 +34,7 @@ export async function createTransaction(transaction) {
   try {
     await db.connectDb();
 
-    const newEndTrialDate = new Date(Date.now() + 20 * 24 * 60 * 60 * 1000);
+    const newEndTrialDate = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
     await User.findOneAndUpdate(
       { clerkId: transaction.buyerId },

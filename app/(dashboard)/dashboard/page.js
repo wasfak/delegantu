@@ -4,11 +4,13 @@ import { getTasks } from "@/app/serverActions/getTasks";
 import EmptyTask from "@/components/EmptyTask";
 import TaskDisplayer from "@/components/TaskDisplayer";
 import { getUserInfo } from "@/app/serverActions/userInfo";
+import { Button } from "@/components/ui/button";
 
 export default function AdminHomePage() {
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState(null);
 
   useEffect(() => {
     setMounted(true);
@@ -26,6 +28,7 @@ export default function AdminHomePage() {
         setLoading(false);
       }
     };
+
     getUserInfo();
     fetchData();
   }, []);
@@ -33,6 +36,21 @@ export default function AdminHomePage() {
   const addNewTask = (newTasks) => {
     setTasks(newTasks);
   };
+
+  const handleUnassigned = () => {
+    // Set filter to 'unassigned' to apply this filter
+    setFilter("unassigned");
+  };
+
+  const handleAll = () => {
+    // Reset the filter to null to clear the filter
+    setFilter(null);
+  };
+
+  const displayedTasks =
+    filter === "unassigned"
+      ? tasks.filter((task) => task.taskStatus === "unassigned")
+      : tasks;
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -43,15 +61,27 @@ export default function AdminHomePage() {
   }
 
   return (
-    <div className="bg-[#212121] rounded-xl p-4 w-[75vw] font-bold">
-      <h1 className="relative inline-block">
-        All Tasks
-        <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#27AE60]"></span>
-      </h1>
+    <div className="bg-[#212121] rounded-xl p-4 w-[75vw] font-bold ">
+      <div className="flex items-center justify-between">
+        <div className="">
+          <h1 className="relative inline-block">
+            All Tasks
+            <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#27AE60]"></span>
+          </h1>
+        </div>
+        <div className="flex items-center gap-x-4">
+          <Button onClick={handleUnassigned} variant="ghost">
+            unassigned
+          </Button>
+          <Button onClick={handleAll} variant="ghost">
+            All
+          </Button>
+        </div>
+      </div>
 
       <div className="grid grid-cols-4 gap-4 mt-4">
-        {tasks?.length > 0 ? (
-          tasks?.map((task) => (
+        {displayedTasks?.length > 0 ? (
+          displayedTasks?.map((task) => (
             <TaskDisplayer
               task={task}
               key={task._id}

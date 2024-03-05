@@ -158,6 +158,10 @@ export default function TaskModal({ isOpen, closeModal, addNewTask }) {
                 <option value="" className="text-black p-2">
                   Select a status
                 </option>
+
+                <option value="unassigned" className="text-black p-2">
+                  unassigned
+                </option>
                 <option value="not_started" className="text-black p-2">
                   Not Started
                 </option>
