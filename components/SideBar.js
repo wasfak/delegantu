@@ -6,6 +6,7 @@ import { IoHomeSharp } from "react-icons/io5";
 import { ImCheckboxChecked } from "react-icons/im";
 import { MdOutlineCallMissedOutgoing } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa";
+import { RiTeamFill } from "react-icons/ri";
 
 export default function SideBar() {
   return (
@@ -35,6 +36,11 @@ export default function SideBar() {
           <FaUserTie />
 
           <Link href="/dashboard/user">User info</Link>
+        </div>
+        <div className="flex items-center gap-x-4">
+          <RiTeamFill />
+
+          <Link href="/dashboard/employee">Team</Link>
         </div>
       </div>
     </div>

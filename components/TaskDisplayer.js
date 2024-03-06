@@ -5,13 +5,15 @@ import { Button } from "./ui/button";
 import { deleteAction } from "@/app/serverActions/deleteTask";
 import { ConfirmModal } from "./ConfirmModal";
 import toast from "react-hot-toast";
-import TaskModal from "./TaskModal";
 import ModifyTaskModal from "./ModifyTaskModal";
+import AssignModal from "./AssignModal";
 
 export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
   const [taskModal, setTaskModal] = useState(false);
+
+  const [assignModal, setAssignModal] = useState(false);
 
   const handleDeleteTrigger = (taskId) => {
     setTaskIdToDelete(taskId);
@@ -32,9 +34,23 @@ export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
 
     setTaskIdToDelete(null);
   };
+
+  const handelAssign = async () => {
+    setAssignModal(true);
+    console.log("done");
+  };
+
   return (
     <div className="bg-[#252525] border-gray-800 rounded-xl shadow-xl flex flex-col items-start justify-between gap-y-4 p-4 text-sm">
-      <h2>{task.taskName}</h2>
+      {task.taskStatus === "unassigned" ? (
+        <div className="flex items-center justify-between w-full">
+          <h2>{task.taskName}</h2>
+          <Button onClick={handelAssign}>Assign</Button>
+        </div>
+      ) : (
+        <h2>{task.taskName}</h2>
+      )}
+
       <span>{task.taskDetail}</span>
       <span>{task.taskCategory}</span>
       <span>{task.taskDate}</span>
@@ -60,6 +76,10 @@ export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
         closeModal={() => setTaskModal(false)}
         task={task}
         addNewTask={addNewTask}
+      />
+      <AssignModal
+        isOpen={assignModal}
+        closeModal={() => setAssignModal(false)}
       />
     </div>
   );

@@ -29,7 +29,8 @@ const UserSchema = new Schema(
     },
     userStatus: {
       type: String,
-      default: "test_user",
+      enum: ["employee", "admin", "boss"],
+      default: "employee",
     },
     startTrialDate: {
       type: Date,
@@ -42,6 +43,9 @@ const UserSchema = new Schema(
     subscribed: {
       type: Boolean,
       default: false,
+    },
+    bossId: {
+      type: String,
     },
   },
   { timestamps: true }

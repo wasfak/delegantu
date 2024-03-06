@@ -1,12 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+
 import { getTasks } from "@/app/serverActions/getTasks";
+
 import EmptyTask from "@/components/EmptyTask";
 import TaskDisplayer from "@/components/TaskDisplayer";
 import { getUserInfo } from "@/app/serverActions/userInfo";
 import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/Loader";
+import { useRouter } from "next/navigation";
 
 export default function AdminHomePage() {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -53,11 +60,15 @@ export default function AdminHomePage() {
       : tasks;
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <Loader />;
   }
 
   if (!mounted) {
     return "";
+  }
+
+  if (!userId) {
+    router.push("/sign-in");
   }
 
   return (

@@ -26,9 +26,11 @@ const taskSchema = new Schema(
       type: String,
       default: "unassigned",
     },
-    assingTo: {
-      type: String,
-    },
+    assingTo: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
