@@ -9,7 +9,7 @@ export const getTeamInfo = async () => {
   try {
     await db.connectDb();
     const team = await User.find({ bossId, userStatus: "employee" });
-    console.log(team);
+
     return JSON.parse(JSON.stringify(team));
   } catch (error) {
     console.error("Error fetching user information:", error);

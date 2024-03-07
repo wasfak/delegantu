@@ -55,7 +55,6 @@ export default function AssignModal({ isOpen, closeModal }) {
     const selectedMembers = team.filter((member) =>
       selectedMemberIds.includes(member._id)
     );
-    console.log(selectedMemberIds);
   };
 
   /*   if (loading) {

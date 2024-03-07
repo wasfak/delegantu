@@ -45,7 +45,9 @@ export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
       {task.taskStatus === "unassigned" ? (
         <div className="flex items-center justify-between w-full">
           <h2>{task.taskName}</h2>
-          <Button onClick={handelAssign}>Assign</Button>
+          <Button onClick={handelAssign} ariaLabel="assign task">
+            Assign
+          </Button>
         </div>
       ) : (
         <h2>{task.taskName}</h2>
@@ -55,12 +57,20 @@ export default function TaskDisplayer({ task, setTasks, tasks, addNewTask }) {
       <span>{task.taskCategory}</span>
       <span>{task.taskDate}</span>
       <div className="flex items-center justify-between w-full">
-        <Button>{task.taskStatus}</Button>
+        <span className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+          {task.taskStatus}
+        </span>
         <div className="flex items-center justify-between gap-x-2">
-          <button onClick={() => handleModifyTrigger(task)}>
+          <button
+            onClick={() => handleModifyTrigger(task)}
+            ariaLabel="edit task"
+          >
             <CiEdit className="w-6 h-6" />
           </button>
-          <button onClick={() => handleDeleteTrigger(task._id)}>
+          <button
+            onClick={() => handleDeleteTrigger(task._id)}
+            ariaLabel="delete task"
+          >
             <MdDelete className="w-6 h-6" fill="red" />
           </button>
         </div>

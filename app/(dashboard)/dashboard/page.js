@@ -81,10 +81,18 @@ export default function AdminHomePage() {
           </h1>
         </div>
         <div className="flex items-center gap-x-4">
-          <Button onClick={handleUnassigned} variant="ghost">
+          <Button
+            onClick={handleUnassigned}
+            variant="ghost"
+            ariaLabel="unassign task"
+          >
             unassigned
           </Button>
-          <Button onClick={handleAll} variant="ghost">
+          <Button
+            onClick={handleAll}
+            variant="ghost"
+            ariaLabel="show all tasks"
+          >
             All
           </Button>
         </div>

@@ -24,7 +24,6 @@ export default function CompletedTasksPage() {
         // Fetch tasks or perform other actions as needed
         const data = await getTasks();
         setTasks(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

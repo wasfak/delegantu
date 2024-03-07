@@ -1,4 +1,5 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+"use client";
+import { SignedIn } from "@clerk/nextjs";
 
 import Link from "next/link";
 
@@ -7,13 +8,44 @@ import { ImCheckboxChecked } from "react-icons/im";
 import { MdOutlineCallMissedOutgoing } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa";
 import { RiTeamFill } from "react-icons/ri";
+import Image from "next/image";
+import { useUser } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
 
 export default function SideBar() {
+  const [mounted, setMounted] = useState(false);
+  const { user } = useUser();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+  if (!mounted) {
+    return "";
+  }
+
+  const profileImageUrl = user.profileImageUrl;
+
   return (
     <div className="bg-[#212121] flex items-center flex-col rounded-xl p-4 h-[80vh] text-sm">
       <div className="flex items-center justify-between gap-x-4">
         <SignedIn>
-          <UserButton afterSignOutUrl="/" />
+          <div>
+            {profileImageUrl ? (
+              <Image
+                src={profileImageUrl}
+                alt="User Profile"
+                width={45}
+                height={45}
+                className="rounded-full"
+              />
+            ) : (
+              <p>No profile image available</p>
+            )}
+          </div>
         </SignedIn>
       </div>
 
